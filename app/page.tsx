@@ -1,4 +1,3 @@
-
 import ProjectList from "@/components/ProjectList";
 
 const projects = [
@@ -25,7 +24,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold mb-4">My Portfolio</h1>
 
         <p className="text-lg text-gray-700">
-          I'm a software development student learning full-stack
+          I&apos;m a software development student learning full-stack
           development. Here are some of my projects.
         </p>
       </section>

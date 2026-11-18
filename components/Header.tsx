@@ -1,4 +1,5 @@
-import NavLinks from "./NavLinks";
+import { Suspense } from 'react';
+import NavLinks from './NavLinks';
 
 export default function Header() {
     return (
@@ -8,7 +9,9 @@ export default function Header() {
                     Kelvin Gonzalez
                 </div>
 
-                <NavLinks />
+                <Suspense fallback={<div className="h-6" />}>
+                    <NavLinks />
+                </Suspense>
             </nav>
         </header>
     );
