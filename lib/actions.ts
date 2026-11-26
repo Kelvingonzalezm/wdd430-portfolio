@@ -1,11 +1,21 @@
+
 'use server';
 
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { auth } from '@/auth';
 
 const currentYear = new Date().getFullYear();
+
+async function requireAuth() {
+    const session = await auth();
+
+    if (!session?.user) {
+        throw new Error('Unauthorized: You must be logged in.');
+    }
+}
 
 const ProjectFormSchema = z.object({
     title: z.string().trim().min(2, 'Title must have at least 2 characters.'),
@@ -44,6 +54,8 @@ export async function createProject(
     _prevState: State,
     formData: FormData,
 ): Promise<State> {
+    await requireAuth();
+
     const validatedFields = CreateProjectSchema.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
@@ -107,6 +119,8 @@ export async function updateProject(
     id: string,
     formData: FormData,
 ) {
+    await requireAuth();
+
     const projectId = Number(id);
 
     if (!Number.isSafeInteger(projectId) || projectId <= 0) {
@@ -144,8 +158,8 @@ export async function updateProject(
             SET
                 title = ${title},
                 description = ${description},
-                type = ${type},
                 technologies = string_to_array(${technologyArray.join(',')}, ','),
+                type = ${type},
                 link = ${link || null}
             WHERE id = ${projectId}
         `;
@@ -158,6 +172,8 @@ export async function updateProject(
 }
 
 export async function deleteProject(id: string) {
+    await requireAuth();
+
     const projectId = Number(id);
 
     if (!Number.isSafeInteger(projectId) || projectId <= 0) {
