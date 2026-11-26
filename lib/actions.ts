@@ -17,10 +17,21 @@ async function requireAuth() {
     }
 }
 
+const yearCompletedSchema = z.preprocess(
+    (value) => (value === '' || value === null ? null : value),
+    z.coerce
+        .number()
+        .int('Year must be a whole number.')
+        .gte(2000, 'Year must be 2000 or later.')
+        .lte(currentYear, `Year cannot be later than ${currentYear}.`)
+        .nullable(),
+);
+
 const ProjectFormSchema = z.object({
     title: z.string().trim().min(2, 'Title must have at least 2 characters.'),
     description: z.string().trim().min(10, 'Description must have at least 10 characters.'),
     technologies: z.string().trim().min(2, 'Technologies are required.'),
+    yearCompleted: yearCompletedSchema,
     type: z.enum(['opensource', 'school']),
     link: z.string().trim().optional(),
 });
@@ -29,11 +40,7 @@ const CreateProjectSchema = z.object({
     title: z.string().trim().min(3, 'Title must have at least 3 characters.'),
     description: z.string().trim().min(20, 'Description must have at least 20 characters.'),
     technologies: z.string().trim().min(2, 'Technologies are required.'),
-    yearCompleted: z.coerce
-        .number()
-        .int('Year must be a whole number.')
-        .gte(2000, 'Year must be 2000 or later.')
-        .lte(currentYear, `Year cannot be later than ${currentYear}.`),
+    yearCompleted: yearCompletedSchema,
     type: z.enum(['opensource', 'school']),
     link: z.string().trim().optional(),
 });
@@ -112,7 +119,8 @@ export async function createProject(
     }
 
     revalidatePath('/projects');
-    redirect('/projects');
+    revalidatePath('/dashboard/projects');
+    redirect('/dashboard/projects');
 }
 
 export async function updateProject(
@@ -131,6 +139,7 @@ export async function updateProject(
         title: formData.get('title'),
         description: formData.get('description'),
         technologies: formData.get('technologies'),
+        yearCompleted: formData.get('yearCompleted'),
         type: formData.get('type'),
         link: formData.get('link'),
     });
@@ -143,6 +152,7 @@ export async function updateProject(
         title,
         description,
         technologies,
+        yearCompleted,
         type,
         link,
     } = validatedFields.data;
@@ -159,6 +169,7 @@ export async function updateProject(
                 title = ${title},
                 description = ${description},
                 technologies = string_to_array(${technologyArray.join(',')}, ','),
+                year_completed = ${yearCompleted},
                 type = ${type},
                 link = ${link || null}
             WHERE id = ${projectId}
@@ -168,7 +179,8 @@ export async function updateProject(
     }
 
     revalidatePath('/projects');
-    redirect('/projects');
+    revalidatePath('/dashboard/projects');
+    redirect('/dashboard/projects');
 }
 
 export async function deleteProject(id: string) {
@@ -190,4 +202,5 @@ export async function deleteProject(id: string) {
     }
 
     revalidatePath('/projects');
+    revalidatePath('/dashboard/projects');
 }

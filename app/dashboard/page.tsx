@@ -4,6 +4,7 @@ import { auth } from '@/auth';
 import { logout } from '@/lib/auth-actions';
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
+import Link from 'next/link';
 
 export default function DashboardPage() {
     return (
@@ -29,6 +30,13 @@ async function DashboardContent() {
             <p className="mb-6">
                 Bienvenido, {session.user.name ?? session.user.email}.
             </p>
+
+            <Link
+                href="/dashboard/projects"
+                className="mb-6 inline-block rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+                Manage Projects
+            </Link>
 
             <form
                 action={async () => {
