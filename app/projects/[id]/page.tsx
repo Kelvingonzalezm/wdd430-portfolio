@@ -1,9 +1,46 @@
+﻿import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { connection } from 'next/server';
 import { Suspense } from 'react';
 import { getProjectById } from '@/lib/projects-db';
 
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+    await connection();
+
+    const { id } = await params;
+    const projectId = Number(id);
+
+    if (!Number.isInteger(projectId) || projectId <= 0) {
+        return {
+            title: 'Project Not Found',
+            description: 'The requested portfolio project could not be found.',
+        };
+    }
+
+    const project = await getProjectById(projectId);
+
+    if (!project) {
+        return {
+            title: 'Project Not Found',
+            description: 'The requested portfolio project could not be found.',
+        };
+    }
+
+    return {
+        title: project.title,
+        description: project.description,
+        openGraph: {
+            title: project.title,
+            description: project.description,
+        },
+    };
+}
 export default function ProjectDetailPage({
     params,
 }: {
@@ -42,7 +79,7 @@ async function ProjectContent({
                 href="/projects"
                 className="mb-6 inline-block text-blue-600 hover:underline"
             >
-                ← Back to Projects
+                â† Back to Projects
             </Link>
 
             <article className="rounded-xl border border-blue-200 bg-blue-50 p-6 shadow-md">
@@ -86,7 +123,7 @@ async function ProjectContent({
                         rel="noopener noreferrer"
                         className="inline-block rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
                     >
-                        View Project →
+                        View Project â†’
                     </a>
                 )}
             </article>

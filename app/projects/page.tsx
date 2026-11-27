@@ -1,4 +1,5 @@
 
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import {
   fetchFilteredProjects,
@@ -6,6 +7,11 @@ import {
 } from '@/lib/projects-db';
 import ProjectSearch from './project-search';
 import Pagination from './pagination';
+
+export const metadata: Metadata = {
+  title: 'Projects',
+  description: 'Explore my personal and academic web development projects.',
+};
 
 type ProjectsPageProps = {
   searchParams: Promise<{

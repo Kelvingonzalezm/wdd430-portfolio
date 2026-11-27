@@ -1,6 +1,11 @@
+﻿import type { Metadata } from 'next';
 
 import type { Project } from '@/lib/projects-db';
 
+export const metadata: Metadata = {
+    title: 'Open Source',
+    description: 'Explore open source software development projects by Kelvin Gonzalez.',
+};
 export const instant = false;
 
 export default async function OpenSourceProjectsPage() {
@@ -75,7 +80,7 @@ export default async function OpenSourceProjectsPage() {
                                 rel="noopener noreferrer"
                                 className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors duration-200"
                             >
-                                View Project →
+                                View Project â†’
                             </a>
                         )}
                     </article>

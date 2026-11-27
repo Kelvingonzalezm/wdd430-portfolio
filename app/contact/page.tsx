@@ -1,3 +1,10 @@
+﻿import type { Metadata } from 'next';
+
+
+export const metadata: Metadata = {
+    title: 'Contact',
+    description: 'Contact Kelvin Gonzalez to discuss web development projects and opportunities.',
+};
 
 export default function ContactPage() {
     return (

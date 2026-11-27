@@ -1,3 +1,4 @@
+﻿import type { Metadata } from 'next';
 import ProjectList from "@/components/ProjectList";
 
 const projects = [
@@ -16,6 +17,14 @@ const projects = [
     link: "https://github.com/Kelvingonzalezm/cse340",
   },
 ];
+
+
+export const metadata: Metadata = {
+  title: {
+    absolute: 'Kelvin Gonzalez | Project Portfolio',
+  },
+  description: 'Welcome to Kelvin Gonzalez portfolio, featuring web development projects and skills.',
+};
 
 export default function Home() {
   return (

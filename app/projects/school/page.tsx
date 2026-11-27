@@ -1,3 +1,4 @@
+﻿import type { Metadata } from 'next';
 
 import { Suspense } from 'react';
 import type { Project } from '@/lib/projects-db';
@@ -63,7 +64,7 @@ async function SchoolProjectList() {
                             rel="noopener noreferrer"
                             className="inline-block bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors duration-200"
                         >
-                            View Project →
+                            View Project â†’
                         </a>
                     )}
                 </article>
@@ -100,6 +101,12 @@ function SchoolProjectsSkeleton() {
         </div>
     );
 }
+
+
+export const metadata: Metadata = {
+    title: 'School Projects',
+    description: 'Explore academic software development projects by Kelvin Gonzalez.',
+};
 
 export default function SchoolProjectsPage() {
     return (
